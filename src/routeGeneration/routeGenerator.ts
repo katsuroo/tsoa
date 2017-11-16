@@ -11,7 +11,7 @@ import { TsoaRoute } from './tsoa-route';
 export class RouteGenerator {
   private tsfmtConfig = {
     editorconfig: true,
-    replace: true,
+    replace: false,
     tsconfig: true,
     tsfmt: true,
     tslint: false,

@@ -24,6 +24,7 @@ export class GetTestController extends Controller {
    * this is some more text on another line
    */
   @Get()
+  @Extension('x-visibility: public')
   @Example<TestModel>({
     boolArray: [true, false],
     boolValue: true,

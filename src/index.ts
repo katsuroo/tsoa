@@ -3,6 +3,7 @@
 /// <reference path="koa.d.ts" />
 
 export * from './decorators/example';
+export * from './decorators/extension';
 export * from './decorators/parameter';
 export * from './decorators/methods';
 export * from './decorators/tags';

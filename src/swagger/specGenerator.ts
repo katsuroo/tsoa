@@ -94,6 +94,9 @@ export class SpecGenerator {
     pathMethod.description = method.description;
     pathMethod.summary = method.summary;
     pathMethod.tags = method.tags;
+    method.extensions.map((extension) => {
+      pathMethod[extension.name] = extension.value || 'null';
+    });
 
     if (method.deprecated) {
       pathMethod.deprecated = method.deprecated;

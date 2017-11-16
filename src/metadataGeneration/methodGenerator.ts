@@ -8,6 +8,10 @@ import { ParameterGenerator } from './parameterGenerator';
 import { getInitializerValue, resolveType } from './resolveType';
 import { Tsoa } from './tsoa';
 
+import * as _dbg from 'debug';
+import * as _mg from 'magic-globals';
+const debug = _dbg('tsoa: ' + _mg.__file);
+
 export class MethodGenerator {
   private method: 'get' | 'post' | 'put' | 'patch' | 'delete';
   private path: string;
@@ -42,6 +46,7 @@ export class MethodGenerator {
     return {
       deprecated: isExistJSDocTag(this.node, (tag) => tag.tagName.text === 'deprecated'),
       description: getJSDocDescription(this.node),
+      extensions: this.getExtensions(),
       isHidden: this.getIsHidden(),
       method: this.method,
       name: (this.node.name as ts.Identifier).text,
@@ -134,6 +139,50 @@ export class MethodGenerator {
           ? resolveType(expression.typeArguments[0])
           : undefined,
       } as Tsoa.Response;
+    });
+  }
+
+  private getExtensions(): Tsoa.Extension[] {
+    const decorators = getDecorators(this.node, (identifier) => identifier.text === 'Extension');
+
+    if (!decorators || !decorators.length) {
+      return [];
+    }
+
+    return decorators.map((decorator) => {
+      const expression = decorator.parent as ts.CallExpression;
+
+      let name;
+      let value;
+      if (expression.arguments.length > 0 && (expression.arguments[0] as any).text) {
+        name = (expression.arguments[0] as any).text;
+        if (!name.toLowerCase().startsWith('x-')) {
+          throw new GenerateMetadataError(`Extensions must start with "x-".`);
+        }
+      }
+
+      if (expression.arguments.length > 1) {
+        switch (expression.arguments[1].kind) {
+          case ts.SyntaxKind.ObjectLiteralExpression:
+          case ts.SyntaxKind.ArrayLiteralExpression:
+            const objStr = (expression.arguments[1] as ts.ObjectLiteralExpression).getText();
+            // tslint:disable no-eval
+            value = eval('(' + objStr + ')');
+            break;
+          case ts.SyntaxKind.StringLiteral:
+            value = (expression.arguments[1] as any).text;
+            break;
+          default:
+            value = undefined;
+            break;
+        }
+      }
+
+      debug(name + ': ' + value);
+      return {
+        name,
+        value,
+      } as Tsoa.Extension;
     });
   }
 

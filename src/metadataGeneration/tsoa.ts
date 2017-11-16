@@ -21,6 +21,7 @@ export namespace Tsoa {
     type: Type;
     tags?: string[];
     responses: Response[];
+    extensions: Extension[];
     security: Security[];
     summary?: string;
     isHidden: boolean;
@@ -52,6 +53,11 @@ export namespace Tsoa {
     name: string;
     schema?: Type;
     examples?: any;
+  }
+
+  export interface Extension {
+    name: string;
+    value?: any;
   }
 
   export interface Property {

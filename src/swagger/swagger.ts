@@ -70,6 +70,11 @@ export namespace Swagger {
     externalDocs?: ExternalDocs;
   }
 
+  export interface Extension {
+    name: string;
+    value?: any;
+  }
+
   export interface Example {
     [name: string]: any;
   }
