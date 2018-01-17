@@ -24,6 +24,7 @@
     "clean": "rimraf dist && rimraf tests/fixtures/*/routes.ts",
     "lint": "tslint --exclude ./node_modules/** ./src/**/*.ts ./tests/**/*.ts",
     "format": "tsfmt -r",
+    "postinstall": "npm run build",
     "prepublish": "npm run build",
     "deploy": "npm version patch -m \"Release v%s\" && npm publish",
     "preversion": "npm test",
