@@ -1,7 +1,7 @@
 // TODO: Replace this with HAPI middleware stuff
 /* tslint:disable */
 {{#if canImportByAlias}}
-  import { Controller, ValidateParam, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
+  import { Controller, ValidateParam, FieldErrors, ValidateError, TsoaRoute } from 'tsoa-extension';
 {{else}}
   import { Controller, ValidateParam, FieldErrors, ValidateError, TsoaRoute } from '../../../src';
 {{/if}}
